@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-bg text-text-secondary font-sans;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+}
+
+/* Film grain overlay */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* Cinematic image treatment */
+.img-cinematic {
+  filter: grayscale(100%) contrast(1.1) brightness(0.95);
+  transition: filter 0.8s ease;
+}
+
+.img-cinematic:hover {
+  filter: grayscale(100%) contrast(1.2) brightness(1);
+}
+
+/* Slow cinematic Ken Burns zoom */
+@keyframes slowZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 25s ease-in-out infinite alternate;
+}
+
+/* Letterbox bars */
+.letterbox {
+  position: relative;
+}
+
+.letterbox::before,
+.letterbox::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12%;
+  background: #000;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.letterbox::before { top: 0; }
+.letterbox::after { bottom: 0; }
+
+@layer components {
+  .article-content h2 {
+    @apply text-[26px] md:text-[32px] font-display font-semibold text-text-primary mb-6 mt-16 tracking-tight;
+  }
+
+  .article-content h3 {
+    @apply text-xl md:text-2xl font-display font-medium text-text-primary mb-4 mt-12;
+  }
+
+  .article-content p {
+    @apply text-text-secondary leading-[1.9] mb-7 text-[16.5px] font-light;
+  }
+
+  .article-content blockquote {
+    @apply border-l border-text-muted pl-8 my-12 text-text-primary/60 text-lg italic font-display;
+  }
+
+  .article-content ul {
+    @apply list-none pl-0 mb-7 space-y-3 text-text-secondary text-[16.5px] leading-[1.9] font-light;
+  }
+
+  .article-content ul li::before {
+    content: '—';
+    @apply text-text-muted mr-3;
+  }
+
+  .article-content ol {
+    @apply list-decimal pl-6 mb-7 space-y-3 text-text-secondary text-[16.5px] leading-[1.9] font-light;
+  }
+
+  .article-content strong {
+    @apply text-text-primary font-medium;
+  }
+
+  .article-content em {
+    @apply text-text-primary/70 font-display;
+  }
+
+  .article-content a {
+    @apply text-text-primary underline underline-offset-4 decoration-text-muted hover:decoration-text-primary transition-all;
+  }
+
+  .article-content code {
+    @apply bg-card text-text-secondary px-1.5 py-0.5 rounded text-sm;
+  }
+
+  .article-content pre {
+    @apply bg-card rounded p-5 overflow-x-auto mb-7 border border-border;
+  }
+
+  .article-content pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .article-content img {
+    @apply my-10 w-full;
+    filter: grayscale(100%) contrast(1.1);
+  }
+
+  .article-content hr {
+    @apply my-16 border-0 h-px bg-border;
+  }
+}
