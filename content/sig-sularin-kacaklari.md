@@ -3,7 +3,7 @@ title: "Sığ Suların Kaçakları"
 date: "2026-04-05"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://hizliresim.com/m02wtvi"
+coverImage: "https://images.unsplash.com/photo-1511497584788-876760111969?w=1200&q=80"
 ---
 
 İnsan ilişkileri, yalnızca aynı zaman dilimini paylaşmak veya aynı mekanda nefes alıp vermekten ibaret değildir; bu, tamamen ruhsal ve zihinsel bir mevcudiyet meselesidir. Birine fiziksel olarak bu kadar yakınken zihnen fersah fersah uzaklarda olmak, varoluşsal bir yoksulluğun en net, en acı göstergesidir.
