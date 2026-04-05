@@ -3,7 +3,7 @@ title: "Yenilginin En Onurlu Hali: Aşk"
 date: "2026-04-05"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1474416432273-58ddc9a6017a?w=1200&q=80"
 ---
 
 Aşk, kazanmakla ilgili değildir. Aşk, yenilmeyi asaletle kabul edebilmektir.
