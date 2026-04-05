@@ -3,6 +3,7 @@ title: "Merhametin İnfazı ve Solan Şakayıklar"
 date: "2026-04-05"
 excerpt: ""
 category: "Düşünceler"
+coverImage: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=1200&q=80"
 ---
 
 İnsanın en büyük yanılgılarından biri, karanlıkta elinden tuttuğu kişinin, aydınlığa çıktığında o eli minnetle sıkacağını sanmasıdır. Oysa birinin enkazını kaldırmak, çoğu zaman o enkazın altında kendi ruhunu bırakmayı göze almaktır. Bir damla gözyaşı akmasın diye kilometreleri hiçe saymak, aylarca uykusuzluğu yorgan yapmak basit bir eylem değil, ağır bir ruhsal adanmışlıktır. Ve bu adanmışlık, kalbini bir başkasına hesapsızca açanların boynuna dolanan en onurlu ama en ağır vebaldir.
