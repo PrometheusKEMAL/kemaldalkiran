@@ -3,6 +3,7 @@ title: "Hiçliğin Melankolik Özgürlüğü"
 date: "2026-04-05"
 excerpt: ""
 category: "Düşünceler"
+coverImage: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80"
 ---
 
 Bazen her şeyin asılsız bir ağırlıkla omuzlarıma çöktüğünü hissediyorum. Sokağın gürültüsü, insanların bitmek bilmeyen telaşı, o çırpınarak "bir şey olma" çabası… Hepsi, kocaman bir boşluğun üzerini örtmek için uydurulmuş ucuz birer tiyatro dekoru gibi geliyor. Gözlerimi kapatıp bu sahte perdeyi araladığımda ise o kaçınılmaz gerçekle baş başa kalıyorum: Hiçlik.
