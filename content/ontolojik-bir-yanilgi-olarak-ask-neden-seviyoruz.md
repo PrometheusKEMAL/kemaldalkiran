@@ -3,7 +3,7 @@ title: "Ontolojik Bir Yanılgı Olarak Aşk: Neden Seviyoruz?"
 date: "2026-04-29"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&q=80"
 ---
 
 Evren, kendi devasa sessizliği içinde, üzerinde hiçbir anlam etiketi taşımayan atomların rastgele ve amaçsız dansından ibarettir. Yıldızlar buz gibi bir soğuklukla parlar, galaksiler arası boşluk sağırdır ve zaman, dokunduğu her şeyi öğüten, hatıraları toza dönüştüren amansız bir dişlidir. Bu uçsuz buçaksız kozmik kayıtsızlığın ortasında modern insan, elinde titreyen cılız bir fenerle varoluşun karanlık dehlizlerinde yürürken aniden bir başka gölgeye rastlar ve adımları yavaşlar. İşte o an, ontolojik bir yanılgının ilk tohumu, tüm rasyonaliteyi ve mantık süzgeçlerini yerle bir ederek kalbin en korumasız köşesine ekilir. Neden seviyoruz sorusuna biyolojinin verdiği "türün devamlılığı" cevabı ya da psikolojinin sunduğu "çocukluk travmalarının telafisi" açıklamaları, o derin varoluşsal sancıyı dindirmeye yetmez; çünkü bizim aşk dediğimiz şey, aslında varlığın dayanılmaz hafifliğine karşı çekilen sessiz ama görkemli bir rest, hiçliğin kalbine saplanmış en zarif hançerdir.
