@@ -3,7 +3,7 @@ title: "İnsan Ruhunun İçinde Yaşayan Yabancı"
 date: "2026-06-02"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1514315384763-ba401779410f?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=1200&q=80"
 ---
 
 Bazı geceler vardır.
