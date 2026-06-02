@@ -3,7 +3,7 @@ title: "Aşkın Mezarlığında Açan Çiçekler"
 date: "2026-06-02"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1507643179173-617d67456adb?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=1200&q=80"
 ---
 
 İnsan, sevdiğini söyler.
