@@ -3,7 +3,7 @@ title: "İnsan Hakikati Sevmez"
 date: "2026-06-03"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1200&q=80"
 ---
 
 İnsan hakikati sevdiğini söyler.
