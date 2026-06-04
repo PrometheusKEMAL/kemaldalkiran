@@ -1,5 +1,5 @@
 ---
-title: "Haritaların İhaneti"
+title: "Bütün Haritalar Tamamlandığında"
 date: "2026-06-04"
 excerpt: ""
 category: "Düşünceler"
