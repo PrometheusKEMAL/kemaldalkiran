@@ -46,7 +46,7 @@ Yaşlı adam uzun süre cevap vermemiş.
 
 Sonra çatlamış dudaklarını aralamış.
 
-Ve yalnızca şu cümlenin kurmuş:
+Ve yalnızca şu cümleyi kurmuş:
 
 "Ben yolları çizdim evlat... Gideceğiniz yeri değil."
 
