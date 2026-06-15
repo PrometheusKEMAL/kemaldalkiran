@@ -3,7 +3,7 @@ title: "Yalnızlık ile Tek Başınalık Arasındaki Fark"
 date: "2026-06-15"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1499956827185-0d63ee78a910?w=1200&q=80"
 ---
 
 Masanın çevresinde sekiz kişi vardı.
