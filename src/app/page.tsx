@@ -5,7 +5,7 @@ import Logo from '@/components/Logo';
 
 export default function HomePage() {
   const articles = getAllArticles();
-  const latestArticles = articles.slice(0, 3);
+  const latestArticles = articles;
 
   return (
     <>
