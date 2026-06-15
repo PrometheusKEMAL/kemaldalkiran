@@ -3,7 +3,7 @@ title: "Nietzsche Neden Sürekli Yanlış Anlaşılıyor?"
 date: "2026-06-15"
 excerpt: ""
 category: "Düşünceler"
-coverImage: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1200&q=80"
+coverImage: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Nietzsche187c.jpg"
 ---
 
 Nietzsche ile çoğu insan bir kitabın ilk sayfasında karşılaşmaz.
