@@ -1,140 +1,58 @@
-'use client';
+import type { Metadata } from 'next';
+import AnimatedSection from '@/components/AnimatedSection';
+import PageHero from '@/components/PageHero';
+import DavetForm from '@/components/DavetForm';
 
-import { useState } from 'react';
-import SocialIcons from '@/components/SocialIcons';
+export const metadata: Metadata = {
+  title: 'Davet',
+  description: 'Davet bir kapıdır; kapı herkese açılmaz. Ahd-i Mizan\'a niyet beyanınızı iletebilirsiniz. Kabul; yalnızca ahlakî uygunluk, güvenilirlik, niyet ve davet süreciyle mümkündür.',
+};
+
+const principles = [
+  'Bu bir başvuru değil, bir niyet beyanıdır.',
+  'Hiçbir beyan; küçümseme, dışlama veya baskı diliyle karşılanmaz.',
+  'Mahremiyet ve kişisel verilerin korunması esastır.',
+  'Kabul; ahlakî uygunluk, güvenilirlik ve davet süreciyle mümkündür.',
+];
 
 export default function IletisimPage() {
-  const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
-
   return (
     <>
-      {/* Cinematic Header */}
-      <div className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden -mt-14">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-          style={{ filter: 'grayscale(100%) contrast(1.15) brightness(0.8)' }}
-        >
-          <source src="/iletisim-hero.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
-        <div className="absolute top-0 left-0 right-0 h-[6%] bg-black z-10" />
-        <div className="absolute bottom-0 left-0 right-0 h-[6%] bg-black z-10" />
+      <PageHero
+        label="İletişim · Davet"
+        title="Davet Bir Kapıdır;"
+        titleItalic="Kapı Herkese Açılmaz"
+        subtitle="Aşağıdaki beyan bir başvuru değil, bir niyet ifadesidir. Sükûtla okunur, sabırla değerlendirilir."
+      />
 
-        <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-6">
-          <p className="text-[10px] tracking-[0.35em] uppercase text-white/40 mb-5">
-            İletişim
-          </p>
-          <h1 className="font-display text-[48px] md:text-[80px] lg:text-[96px] leading-[0.85] text-white font-bold tracking-tight mb-5">
-            BANA ULAŞIN
-          </h1>
-          <div className="w-12 h-px bg-white/30 mb-5" />
-          <p className="text-white/35 text-[13px] md:text-[14px] font-light tracking-wide max-w-xs">
-            Bir düşünce paylaşmak ya da sadece merhaba demek için
-          </p>
-        </div>
-      </div>
+      <section className="bg-surface-2 py-20 md:py-28 border-t border-gold/8">
+        <div className="max-w-4xl mx-auto px-6 md:px-10">
+          {/* Principles */}
+          <AnimatedSection className="mb-16">
+            <div className="grid sm:grid-cols-2 gap-4">
+              {principles.map((p, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <svg width="15" height="15" viewBox="0 0 14 14" fill="none" className="mt-1 shrink-0 text-gold">
+                    <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <p className="text-text-secondary text-[14px] leading-relaxed">{p}</p>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
 
-      <section className="max-w-6xl mx-auto px-6 md:px-10 pt-16 pb-28">
-        <div className="grid md:grid-cols-[1fr_1.2fr] gap-16 md:gap-24">
-          {/* Left - Info & Socials */}
-          <div>
-            <p className="text-white/45 text-[16px] leading-[1.9] font-light mb-10">
-              Yazılarım hakkında düşüncelerinizi paylaşmak, iş birliği yapmak veya sadece merhaba demek isterseniz — formu doldurabilir ya da sosyal medya hesaplarımdan bana ulaşabilirsiniz.
+          {/* Form */}
+          <AnimatedSection delay={0.1}>
+            <DavetForm />
+          </AnimatedSection>
+
+          {/* Closing */}
+          <AnimatedSection className="mt-20 text-center">
+            <div className="gold-line-center mb-8" />
+            <p className="font-display italic text-gold-light/80 text-[1.25rem] md:text-[1.5rem] leading-relaxed">
+              Arayan için daima bir eşik vardır; ama eşikten geçmek, sabrın ve ahlakın işidir.
             </p>
-
-            <div className="mb-10">
-              <p className="text-[10px] tracking-cinematic uppercase text-white/25 mb-5">
-                Sosyal Medya
-              </p>
-              <SocialIcons size={18} />
-            </div>
-
-            <div>
-              <p className="text-[10px] tracking-cinematic uppercase text-white/25 mb-3">
-                E-Posta
-              </p>
-              <a
-                href="mailto:info@kemaldalkiran.com"
-                className="text-white/40 hover:text-white/70 transition-colors text-[15px] font-light"
-              >
-                info@kemaldalkiran.com
-              </a>
-            </div>
-          </div>
-
-          {/* Right - Form */}
-          <div>
-            {submitted ? (
-              <div className="flex flex-col items-center justify-center py-20 border border-white/[0.06] text-center">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-white/30 mb-6">
-                  <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <p className="text-white/50 font-display text-xl mb-2">Mesajınız alındı</p>
-                <p className="text-white/25 text-sm font-light">En kısa sürede dönüş yapacağım.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-[10px] tracking-cinematic uppercase text-white/25 mb-3">
-                    İsim
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formState.name}
-                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                    className="w-full bg-transparent border border-white/[0.08] px-5 py-3.5 text-white/70 text-[15px] font-light placeholder:text-white/15 focus:border-white/20 focus:outline-none transition-colors"
-                    placeholder="Adınız"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] tracking-cinematic uppercase text-white/25 mb-3">
-                    E-Posta
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formState.email}
-                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                    className="w-full bg-transparent border border-white/[0.08] px-5 py-3.5 text-white/70 text-[15px] font-light placeholder:text-white/15 focus:border-white/20 focus:outline-none transition-colors"
-                    placeholder="E-posta adresiniz"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] tracking-cinematic uppercase text-white/25 mb-3">
-                    Mesaj
-                  </label>
-                  <textarea
-                    required
-                    rows={6}
-                    value={formState.message}
-                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                    className="w-full bg-transparent border border-white/[0.08] px-5 py-3.5 text-white/70 text-[15px] font-light placeholder:text-white/15 focus:border-white/20 focus:outline-none transition-colors resize-none"
-                    placeholder="Mesajınızı yazın..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="text-[10px] tracking-cinematic uppercase text-white/50 border border-white/10 px-8 py-3.5 hover:text-white hover:border-white/30 transition-all duration-700"
-                >
-                  Gönder
-                </button>
-              </form>
-            )}
-          </div>
+          </AnimatedSection>
         </div>
       </section>
     </>

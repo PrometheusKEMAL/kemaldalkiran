@@ -6,6 +6,21 @@ import html from 'remark-html';
 
 const contentDirectory = path.join(process.cwd(), 'content');
 
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+// Resolve a slug to a path guaranteed to live inside contentDirectory.
+function safeArticlePath(slug: string): string | null {
+  if (typeof slug !== 'string' || !SLUG_RE.test(slug) || slug.length > 200) {
+    return null;
+  }
+  const filePath = path.join(contentDirectory, `${slug}.md`);
+  const normalized = path.normalize(filePath);
+  if (normalized !== filePath || !normalized.startsWith(contentDirectory + path.sep)) {
+    return null;
+  }
+  return normalized;
+}
+
 export interface Article {
   slug: string;
   title: string;
@@ -50,9 +65,9 @@ export function getAllArticles(): Article[] {
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-  const fullPath = path.join(contentDirectory, `${slug}.md`);
+  const fullPath = safeArticlePath(slug);
 
-  if (!fs.existsSync(fullPath)) {
+  if (!fullPath || !fs.existsSync(fullPath)) {
     return null;
   }
 
