@@ -19,7 +19,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, name, password, realName, nickname, age, joinDate, isReferred, referredBy } = body;
+    const { email, name, password, realName, nickname, age, gender, joinDate, isReferred, referredBy } = body;
 
     if (!email || !name || !password) {
       return NextResponse.json(
@@ -42,6 +42,7 @@ export async function POST(req: Request) {
       realName,
       nickname,
       age: age ? Number(age) : undefined,
+      gender,
       joinDate,
       isReferred,
       referredBy,
@@ -55,6 +56,7 @@ export async function POST(req: Request) {
         realName: user.realName,
         nickname: user.nickname,
         age: user.age,
+        gender: user.gender,
         joinDate: user.joinDate,
         isReferred: user.isReferred,
         referredBy: user.referredBy,

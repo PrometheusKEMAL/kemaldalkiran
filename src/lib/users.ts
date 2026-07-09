@@ -11,6 +11,7 @@ export interface User {
   realName?: string;
   nickname?: string;
   age?: number;
+  gender?: 'erkek' | 'kadın' | 'belirtmek-istemiyor';
   joinDate?: string;
   isReferred?: boolean;
   referredBy?: string;
@@ -81,13 +82,14 @@ export interface CreateUserInput {
   realName?: string;
   nickname?: string;
   age?: number;
+  gender?: 'erkek' | 'kadın' | 'belirtmek-istemiyor';
   joinDate?: string;
   isReferred?: boolean;
   referredBy?: string;
 }
 
 export async function createUser(input: CreateUserInput): Promise<User> {
-  const { email, name, password, realName, nickname, age, joinDate, isReferred, referredBy } = input;
+  const { email, name, password, realName, nickname, age, gender, joinDate, isReferred, referredBy } = input;
   const existing = await getUserByEmail(email);
   if (existing) {
     throw new Error('Bu e-posta adresiyle bir kullanıcı zaten var.');
@@ -102,6 +104,7 @@ export async function createUser(input: CreateUserInput): Promise<User> {
     realName: realName?.trim() || undefined,
     nickname: nickname?.trim() || undefined,
     age: age ?? undefined,
+    gender: gender || undefined,
     joinDate: joinDate?.trim() || undefined,
     isReferred: isReferred ?? false,
     referredBy: referredBy?.trim() || undefined,

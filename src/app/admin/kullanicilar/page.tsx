@@ -9,6 +9,7 @@ interface User {
   realName?: string;
   nickname?: string;
   age?: number;
+  gender?: 'erkek' | 'kadın' | 'belirtmek-istemiyor';
   joinDate?: string;
   isReferred?: boolean;
   referredBy?: string;
@@ -23,6 +24,7 @@ export default function KullanicilarPage() {
     realName: '',
     nickname: '',
     age: '',
+    gender: '',
     joinDate: '',
     isReferred: false,
     referredBy: '',
@@ -70,6 +72,7 @@ export default function KullanicilarPage() {
           realName: '',
           nickname: '',
           age: '',
+          gender: '',
           joinDate: '',
           isReferred: false,
           referredBy: '',
@@ -190,6 +193,21 @@ export default function KullanicilarPage() {
           </div>
 
           <div>
+            <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">Cinsiyet</label>
+            <select
+              value={form.gender}
+              onChange={(e) => setForm({ ...form, gender: e.target.value })}
+              className="w-full bg-transparent border border-chalk/10 focus:border-gold/40 px-5 py-3.5 text-chalk/80 text-[14px] focus:outline-none transition-colors appearance-none cursor-pointer"
+              style={{ backgroundImage: 'none' }}
+            >
+              <option value="" className="bg-surface text-chalk/80">Seçiniz</option>
+              <option value="erkek" className="bg-surface text-chalk/80">Erkek</option>
+              <option value="kadın" className="bg-surface text-chalk/80">Kadın</option>
+              <option value="belirtmek-istemiyor" className="bg-surface text-chalk/80">Belirtmek İstemiyor</option>
+            </select>
+          </div>
+
+          <div>
             <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">Katılım Tarihi</label>
             <input
               type="date"
@@ -273,6 +291,7 @@ export default function KullanicilarPage() {
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[11px] text-chalk/30">
                   {user.realName && <span>Gerçek isim: {user.realName}</span>}
                   {user.age !== undefined && <span>Yaş: {user.age}</span>}
+                  {user.gender && <span>Cinsiyet: {user.gender === 'belirtmek-istemiyor' ? 'Belirtmek istemiyor' : user.gender === 'erkek' ? 'Erkek' : 'Kadın'}</span>}
                   {user.joinDate && <span>Katılım: {user.joinDate}</span>}
                   {user.referredBy && <span>Referans: {user.referredBy}</span>}
                 </div>
