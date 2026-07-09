@@ -25,6 +25,7 @@ const pageVariants: Variants = {
     y: -20,
     scale: 1.01,
     filter: 'blur(8px)',
+    pointerEvents: 'none',
     transition: {
       duration: 0.45,
       ease: [0.4, 0, 0.2, 1] as const,

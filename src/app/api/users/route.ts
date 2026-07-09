@@ -18,7 +18,8 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { email, name, password } = await req.json();
+    const body = await req.json();
+    const { email, name, password, realName, nickname, age, joinDate, isReferred, referredBy } = body;
 
     if (!email || !name || !password) {
       return NextResponse.json(
@@ -34,10 +35,30 @@ export async function POST(req: Request) {
       );
     }
 
-    const user = await createUser(email, name, password);
+    const user = await createUser({
+      email,
+      name,
+      password,
+      realName,
+      nickname,
+      age: age ? Number(age) : undefined,
+      joinDate,
+      isReferred,
+      referredBy,
+    });
     return NextResponse.json({
       success: true,
-      user: { email: user.email, name: user.name, createdAt: user.createdAt },
+      user: {
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        realName: user.realName,
+        nickname: user.nickname,
+        age: user.age,
+        joinDate: user.joinDate,
+        isReferred: user.isReferred,
+        referredBy: user.referredBy,
+      },
     });
   } catch (error) {
     console.error('Create user error:', error);

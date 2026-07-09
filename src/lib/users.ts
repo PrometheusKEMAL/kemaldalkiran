@@ -5,9 +5,15 @@ import path from 'path';
 
 export interface User {
   email: string;
-  name: string;
+  name: string; // takma ad / meclis içi isim
   passwordHash: string;
   createdAt: string;
+  realName?: string;
+  nickname?: string;
+  age?: number;
+  joinDate?: string;
+  isReferred?: boolean;
+  referredBy?: string;
 }
 
 const USERS_KEY = 'ahdimizan:users';
@@ -68,7 +74,20 @@ export async function verifyPassword(email: string, password: string): Promise<U
   return user;
 }
 
-export async function createUser(email: string, name: string, password: string): Promise<User> {
+export interface CreateUserInput {
+  email: string;
+  name: string;
+  password: string;
+  realName?: string;
+  nickname?: string;
+  age?: number;
+  joinDate?: string;
+  isReferred?: boolean;
+  referredBy?: string;
+}
+
+export async function createUser(input: CreateUserInput): Promise<User> {
+  const { email, name, password, realName, nickname, age, joinDate, isReferred, referredBy } = input;
   const existing = await getUserByEmail(email);
   if (existing) {
     throw new Error('Bu e-posta adresiyle bir kullanıcı zaten var.');
@@ -80,6 +99,12 @@ export async function createUser(email: string, name: string, password: string):
     name: name.trim(),
     passwordHash,
     createdAt: new Date().toISOString(),
+    realName: realName?.trim() || undefined,
+    nickname: nickname?.trim() || undefined,
+    age: age ?? undefined,
+    joinDate: joinDate?.trim() || undefined,
+    isReferred: isReferred ?? false,
+    referredBy: referredBy?.trim() || undefined,
   };
 
   const users = await readUsers();
