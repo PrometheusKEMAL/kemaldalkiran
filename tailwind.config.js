@@ -41,7 +41,7 @@ module.exports = {
       fontFamily: {
         seal: ['"Cinzel"', 'Georgia', 'serif'],
         display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        prose: ['"Lora"', 'Georgia', 'serif'],
+        prose: ['"Source Serif 4"', 'Georgia', 'serif'],
         sans: ['"Inter"', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
