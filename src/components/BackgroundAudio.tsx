@@ -1,10 +1,19 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Volume2, VolumeX, Play, Pause, Music } from 'lucide-react';
+import { Volume2, VolumeX, Play, Pause, Music, SkipForward, SkipBack } from 'lucide-react';
+
+// Dilediğiniz zaman buraya yeni müzik dosyalarının isimlerini ekleyebilirsiniz.
+// (Şarkıları projedeki 'public' klasörüne atmanız yeterlidir.)
+const PLAYLIST = [
+  "/bg-music.mp4",
+  // "/yeni-sarki.mp3",
+  // "/baska-bir-sarki.mp4"
+];
 
 export default function BackgroundAudio() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
@@ -17,6 +26,29 @@ export default function BackgroundAudio() {
     }
   }, [volume, isMuted]);
 
+  // Playlist'te şarkı değiştiğinde veya müzik bittiğinde sıradaki başlasın
+  useEffect(() => {
+    if (isPlaying && audioRef.current) {
+      // Yeni şarkıyı yükle ve oynat
+      audioRef.current.play().catch(e => console.warn("Otomatik oynatma engellendi:", e));
+    }
+  }, [currentTrackIndex, isPlaying]);
+
+  const handleNextTrack = () => {
+    setCurrentTrackIndex((prev) => (prev + 1) % PLAYLIST.length);
+    setIsPlaying(true);
+  };
+
+  const handlePrevTrack = () => {
+    setCurrentTrackIndex((prev) => (prev - 1 + PLAYLIST.length) % PLAYLIST.length);
+    setIsPlaying(true);
+  };
+
+  // Bir şarkı bittiğinde otomatik diğerine geç (son şarkıysa başa döner)
+  const handleTrackEnded = () => {
+    handleNextTrack();
+  };
+
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -26,7 +58,7 @@ export default function BackgroundAudio() {
         audioRef.current.play().then(() => {
           setIsPlaying(true);
         }).catch((err) => {
-          console.warn("Autoplay blocked block:", err);
+          console.warn("Autoplay blocked:", err);
         });
       }
     }
@@ -46,38 +78,66 @@ export default function BackgroundAudio() {
 
   return (
     <>
-      <audio ref={audioRef} loop src="/bg-music.mp4" preload="auto" />
+      {/* Döngü (loop) yerine onEnded event'i ile kendi çalar listemizi yöneteceğiz */}
+      <audio 
+        ref={audioRef} 
+        src={PLAYLIST[currentTrackIndex]} 
+        onEnded={handleTrackEnded}
+        preload="auto" 
+      />
       
-      <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 transition-all duration-300 ${isExpanded ? 'bg-surface/90 backdrop-blur-md p-3 rounded-2xl border border-gold/30 shadow-gold' : ''}`}>
+      <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 sm:gap-3 transition-all duration-300 ${isExpanded ? 'bg-surface/90 backdrop-blur-md p-2 sm:p-3 rounded-2xl border border-gold/30 shadow-[0_0_20px_rgba(201,166,70,0.15)]' : ''}`}>
         
-        {/* Genişletilmiş Ses Kontrol Paneli */}
+        {/* Genişletilmiş Çalma İşlevleri Paneli */}
         {isExpanded && (
-          <div className="flex items-center gap-3 animate-fade-in pr-2 border-r border-gold/20">
-             <button 
-                onClick={toggleMute}
-                className="text-gold/80 hover:text-gold transition-colors"
-                title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
-             >
-                {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
-             </button>
+          <div className="flex items-center gap-1 sm:gap-3 animate-fade-in pr-2 border-r border-gold/20">
              
-             <input 
-                type="range" 
-                min="0" 
-                max="1" 
-                step="0.01" 
-                value={isMuted ? 0 : volume} 
-                onChange={handleVolumeChange}
-                className="w-24 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-gold"
-                title="Ses Seviyesi"
-             />
+             {/* İleri / Geri Butonları */}
+             <div className="flex items-center text-gold/80 px-1 sm:px-2">
+                <button 
+                   onClick={handlePrevTrack} 
+                   className="hover:text-gold transition-colors p-1 transform hover:scale-110 active:scale-95" 
+                   title="Önceki Şarkı"
+                >
+                   <SkipBack size={20} />
+                </button>
+                <button 
+                   onClick={handleNextTrack} 
+                   className="hover:text-gold transition-colors p-1 transform hover:scale-110 active:scale-95" 
+                   title="Sonraki Şarkı"
+                >
+                   <SkipForward size={20} />
+                </button>
+             </div>
+
+             {/* Ses Kontrolü */}
+             <div className="flex items-center gap-2 border-l border-gold/10 pl-2 sm:pl-3">
+                 <button 
+                    onClick={toggleMute}
+                    className="text-gold/80 hover:text-gold transition-colors transform hover:scale-110 active:scale-95"
+                    title={isMuted || volume === 0 ? "Sesi Aç" : "Sesi Kapat"}
+                 >
+                    {isMuted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                 </button>
+                 
+                 {/* Mobil ekranda ses barı çok yer kaplamaması için mobilde gizleyip tablette/masaüstünde gösteriyoruz */}
+                 <input 
+                    type="range" 
+                    min="0" 
+                    max="1" 
+                    step="0.01" 
+                    value={isMuted ? 0 : volume} 
+                    onChange={handleVolumeChange}
+                    className="w-16 sm:w-20 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-gold hidden md:block"
+                    title="Ses Seviyesi"
+                 />
+             </div>
           </div>
         )}
 
         {/* Ana Oynat/Durdur ve Genişletme Butonu */}
         <button
           onClick={() => {
-             // Sadece play/pause yapma, aynı zamanda paneli aç/kapat
              if (!isExpanded) setIsExpanded(true);
              togglePlay();
           }}
@@ -95,12 +155,12 @@ export default function BackgroundAudio() {
           )}
         </button>
 
-        {/* Eğer panel açıksa kapatma butonu işlevi gören küçük çarpı yerine müzik ikonu kullanılabilir, veya tıklandığında paneli kapatır */}
         {isExpanded && (
            <button 
               onClick={() => setIsExpanded(false)}
-              className="text-xs text-gold/60 hover:text-gold/90 transition-colors absolute -top-2 -right-2 bg-surface rounded-full p-1 border border-gold/20"
-              title="Kapat"
+              className="text-white hover:text-red-400 bg-red-500/20 hover:bg-red-500/40 transition-colors absolute -top-2 -right-2 rounded-full p-1 border border-red-500/30 w-5 h-5 flex items-center justify-center shadow-lg"
+              title="Paneli Gizle"
+              style={{ fontSize: "10px" }}
            >
               ✕
            </button>
