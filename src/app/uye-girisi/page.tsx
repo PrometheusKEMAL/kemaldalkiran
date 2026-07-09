@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
+import MizanPortal from '@/components/MizanPortal';
 
 export default function UyeGirisiPage() {
   const router = useRouter();
@@ -38,11 +39,13 @@ export default function UyeGirisiPage() {
   };
 
   return (
-    <div className="min-h-screen bg-emerald-deep flex flex-col items-center justify-center px-6 py-24 -mt-16">
+    <div className="min-h-screen bg-emerald-deep -mt-16">
+      <MizanPortal />
+
       {/* Geo background */}
       <div className="absolute inset-0 bg-geo-dark opacity-20 pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-md mx-auto px-6 py-16">
         {/* Logo */}
         <div className="flex flex-col items-center mb-12">
           <Logo size={56} variant="light" className="mb-6 opacity-85" />
