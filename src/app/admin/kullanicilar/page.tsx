@@ -31,6 +31,23 @@ export default function KullanicilarPage() {
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [editingEmail, setEditingEmail] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setForm({
+      email: '',
+      name: '',
+      password: '',
+      realName: '',
+      nickname: '',
+      age: '',
+      gender: '',
+      joinDate: '',
+      isReferred: false,
+      referredBy: '',
+    });
+    setEditingEmail(null);
+  };
 
   const loadUsers = async () => {
     try {
@@ -53,30 +70,22 @@ export default function KullanicilarPage() {
     setStatus('loading');
     setMessage('');
 
+    const isEditing = Boolean(editingEmail);
+    const payload = isEditing ? { ...form, email: editingEmail, password: form.password || undefined } : form;
+
     try {
       const res = await fetch('/api/users', {
-        method: 'POST',
+        method: isEditing ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         setStatus('success');
-        setMessage(`Kullanıcı oluşturuldu: ${data.user.email}`);
-        setForm({
-          email: '',
-          name: '',
-          password: '',
-          realName: '',
-          nickname: '',
-          age: '',
-          gender: '',
-          joinDate: '',
-          isReferred: false,
-          referredBy: '',
-        });
+        setMessage(isEditing ? `Kullanıcı güncellendi: ${data.user.email}` : `Kullanıcı oluşturuldu: ${data.user.email}`);
+        resetForm();
         loadUsers();
       } else {
         setStatus('error');
@@ -86,6 +95,27 @@ export default function KullanicilarPage() {
       setStatus('error');
       setMessage('Bağlantı hatası.');
     }
+  };
+
+  const handleEdit = (user: User) => {
+    setEditingEmail(user.email);
+    setForm({
+      email: user.email,
+      name: user.name,
+      password: '',
+      realName: user.realName || '',
+      nickname: user.nickname || '',
+      age: user.age?.toString() || '',
+      gender: user.gender || '',
+      joinDate: user.joinDate || '',
+      isReferred: user.isReferred || false,
+      referredBy: user.referredBy || '',
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancel = () => {
+    resetForm();
   };
 
   const handleDelete = async (email: string) => {
@@ -132,6 +162,15 @@ export default function KullanicilarPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5 mb-16 border border-white/10 bg-white/[0.02] p-6 md:p-8">
+        <div className="mb-4 pb-4 border-b border-white/10">
+          <h2 className="font-display text-[20px] text-chalk">
+            {editingEmail ? 'Üye Düzenle' : 'Yeni Üye Oluştur'}
+          </h2>
+          {editingEmail && (
+            <p className="text-chalk/40 text-[12px] mt-1">{editingEmail}</p>
+          )}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
             <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">Meclis İçi İsim / Takma Ad <span className="text-gold">*</span></label>
@@ -146,13 +185,16 @@ export default function KullanicilarPage() {
           </div>
 
           <div>
-            <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">E-posta <span className="text-gold">*</span></label>
+            <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">
+              E-posta {editingEmail ? '' : <span className="text-gold">*</span>}
+            </label>
             <input
               type="email"
-              required
+              required={!editingEmail}
+              disabled={Boolean(editingEmail)}
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full bg-transparent border border-chalk/10 focus:border-gold/40 px-5 py-3.5 text-chalk/80 text-[14px] placeholder:text-chalk/20 focus:outline-none transition-colors"
+              className={`w-full bg-transparent border border-chalk/10 focus:border-gold/40 px-5 py-3.5 text-chalk/80 text-[14px] placeholder:text-chalk/20 focus:outline-none transition-colors ${editingEmail ? 'opacity-50 cursor-not-allowed' : ''}`}
               placeholder="ornek@mail.com"
             />
           </div>
@@ -219,16 +261,21 @@ export default function KullanicilarPage() {
         </div>
 
         <div>
-          <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">Şifre <span className="text-gold">*</span></label>
+          <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">
+            Şifre {editingEmail ? '' : <span className="text-gold">*</span>}
+          </label>
           <input
             type="text"
-            required
+            required={!editingEmail}
             minLength={6}
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="w-full bg-transparent border border-chalk/10 focus:border-gold/40 px-5 py-3.5 text-chalk/80 text-[14px] placeholder:text-chalk/20 focus:outline-none transition-colors"
-            placeholder="En az 6 karakter"
+            placeholder={editingEmail ? 'Boş bırakırsan şifre değişmez' : 'En az 6 karakter'}
           />
+          {editingEmail && (
+            <p className="text-chalk/30 text-[11px] mt-2">Şifreyi değiştirmek istemiyorsan bu alanı boş bırak.</p>
+          )}
         </div>
 
         <div className="flex items-start gap-4 border border-white/10 bg-white/[0.02] p-5">
@@ -256,13 +303,25 @@ export default function KullanicilarPage() {
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="text-[11px] tracking-widest uppercase font-medium text-charcoal bg-gold px-6 py-3.5 hover:bg-gold-light disabled:opacity-50 transition-colors duration-300"
-        >
-          {status === 'loading' ? 'Kaydediliyor…' : 'Üye Oluştur'}
-        </button>
+        <div className="flex flex-wrap items-center gap-4">
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="text-[11px] tracking-widest uppercase font-medium text-charcoal bg-gold px-6 py-3.5 hover:bg-gold-light disabled:opacity-50 transition-colors duration-300"
+          >
+            {status === 'loading' ? 'Kaydediliyor…' : editingEmail ? 'Güncelle' : 'Üye Oluştur'}
+          </button>
+
+          {editingEmail && (
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="text-[11px] tracking-widest uppercase font-medium text-chalk/70 border border-white/20 px-6 py-3.5 hover:bg-white/5 transition-colors duration-300"
+            >
+              İptal
+            </button>
+          )}
+        </div>
       </form>
 
       <div className="border border-white/10 bg-white/[0.02]">
@@ -296,12 +355,20 @@ export default function KullanicilarPage() {
                   {user.referredBy && <span>Referans: {user.referredBy}</span>}
                 </div>
               </div>
-              <button
-                onClick={() => handleDelete(user.email)}
-                className="self-start text-[10px] tracking-wider uppercase text-red-300/70 hover:text-red-300 border border-red-500/20 px-3 py-1.5 hover:bg-red-500/10 transition-colors"
-              >
-                Sil
-              </button>
+              <div className="self-start flex items-center gap-2">
+                <button
+                  onClick={() => handleEdit(user)}
+                  className="text-[10px] tracking-wider uppercase text-gold/80 hover:text-gold border border-gold/30 px-3 py-1.5 hover:bg-gold/10 transition-colors"
+                >
+                  Düzenle
+                </button>
+                <button
+                  onClick={() => handleDelete(user.email)}
+                  className="text-[10px] tracking-wider uppercase text-red-300/70 hover:text-red-300 border border-red-500/20 px-3 py-1.5 hover:bg-red-500/10 transition-colors"
+                >
+                  Sil
+                </button>
+              </div>
             </div>
           ))}
         </div>

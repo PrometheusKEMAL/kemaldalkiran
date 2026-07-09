@@ -118,6 +118,42 @@ export async function createUser(input: CreateUserInput): Promise<User> {
   return newUser;
 }
 
+export interface UpdateUserInput extends Partial<Omit<CreateUserInput, 'email' | 'password'>> {
+  password?: string;
+}
+
+export async function updateUser(email: string, input: UpdateUserInput): Promise<User> {
+  const users = await readUsers();
+  const normalizedEmail = email.trim().toLowerCase();
+  const index = users.findIndex((u) => u.email.toLowerCase() === normalizedEmail);
+  if (index === -1) {
+    throw new Error('Kullanıcı bulunamadı.');
+  }
+
+  const existing = users[index];
+  const updates: Partial<User> = {};
+
+  if (input.name !== undefined) updates.name = input.name.trim();
+  if (input.realName !== undefined) updates.realName = input.realName?.trim() || undefined;
+  if (input.nickname !== undefined) updates.nickname = input.nickname?.trim() || undefined;
+  if (input.age !== undefined) updates.age = input.age ?? undefined;
+  if (input.gender !== undefined) updates.gender = input.gender || undefined;
+  if (input.joinDate !== undefined) updates.joinDate = input.joinDate?.trim() || undefined;
+  if (input.isReferred !== undefined) updates.isReferred = input.isReferred ?? false;
+  if (input.referredBy !== undefined) updates.referredBy = input.referredBy?.trim() || undefined;
+
+  if (input.password && input.password.length >= 6) {
+    updates.passwordHash = await hash(input.password, 12);
+  }
+
+  const updatedUser: User = { ...existing, ...updates };
+  users[index] = updatedUser;
+  await writeUsers(users);
+  console.log('[updateUser] saved to', hasKv() ? 'kv' : 'file', 'email:', updatedUser.email);
+
+  return updatedUser;
+}
+
 export async function deleteUser(email: string): Promise<void> {
   const users = await readUsers();
   const normalizedEmail = email.trim().toLowerCase();

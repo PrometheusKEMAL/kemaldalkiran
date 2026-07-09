@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { listUsers, createUser, deleteUser } from '@/lib/users';
+import { listUsers, createUser, updateUser, deleteUser } from '@/lib/users';
 
 export const dynamic = 'force-dynamic';
 
@@ -66,6 +66,61 @@ export async function POST(req: Request) {
     console.error('Create user error:', error);
     return NextResponse.json(
       { error: (error as Error).message || 'Kullanıcı oluşturulurken bir hata oluştu.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+    const { email, name, realName, nickname, age, gender, joinDate, isReferred, referredBy, password } = body;
+
+    if (!email) {
+      return NextResponse.json(
+        { error: 'Güncellenecek e-posta adresi gereklidir.' },
+        { status: 400 }
+      );
+    }
+
+    if (password && password.length < 6) {
+      return NextResponse.json(
+        { error: 'Şifre en az 6 karakter olmalıdır.' },
+        { status: 400 }
+      );
+    }
+
+    const user = await updateUser(email, {
+      name,
+      realName,
+      nickname,
+      age: age ? Number(age) : undefined,
+      gender,
+      joinDate,
+      isReferred,
+      referredBy,
+      password: password || undefined,
+    });
+
+    return NextResponse.json({
+      success: true,
+      user: {
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        realName: user.realName,
+        nickname: user.nickname,
+        age: user.age,
+        gender: user.gender,
+        joinDate: user.joinDate,
+        isReferred: user.isReferred,
+        referredBy: user.referredBy,
+      },
+    });
+  } catch (error) {
+    console.error('Update user error:', error);
+    return NextResponse.json(
+      { error: (error as Error).message || 'Kullanıcı güncellenirken bir hata oluştu.' },
       { status: 500 }
     );
   }
