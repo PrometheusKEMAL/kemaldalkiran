@@ -1,17 +1,40 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
-import Link from 'next/link';
 
 export default function UyeGirisiPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => setLoading(false), 1200);
+    setError('');
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        router.replace('/');
+        router.refresh();
+      } else {
+        setError(data.error || 'Giriş başarısız oldu.');
+      }
+    } catch {
+      setError('Bağlantı hatası oluştu.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +61,12 @@ export default function UyeGirisiPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
+          {error && (
+            <div className="border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-200/80 text-[13px]">
+              {error}
+            </div>
+          )}
+
           <div>
             <label className="block text-[10px] tracking-widest uppercase text-chalk/40 mb-2.5">
               E-posta
@@ -81,15 +110,6 @@ export default function UyeGirisiPage() {
           Bu alan kişisel verilerin, iç toplantı notlarının ve üyelik sorumluluklarının
           güvenli biçimde korunması amacıyla sınırlı erişime sahiptir.
         </p>
-
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="text-[10px] tracking-wider uppercase text-chalk/25 hover:text-chalk/50 transition-colors"
-          >
-            &larr; Ana Sayfa
-          </Link>
-        </div>
       </div>
     </div>
   );

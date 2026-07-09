@@ -3,6 +3,18 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async redirects() {
+    return [
+      { source: '/hakkimda', destination: '/meclis-hakkinda', permanent: true },
+      { source: '/hakkimizda', destination: '/meclis-hakkinda', permanent: true },
+      { source: '/ilkelerimiz', destination: '/mizan-ilkeleri', permanent: true },
+      { source: '/ogreti', destination: '/tedris-defterleri', permanent: true },
+      { source: '/semboller', destination: '/', permanent: true },
+      { source: '/manifesto', destination: '/mizan-ilkeleri', permanent: true },
+      { source: '/uyelik', destination: '/davet-usulu', permanent: true },
+      { source: '/tuzuk', destination: '/mizan-ilkeleri', permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -1,32 +1,57 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Logo from './Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface SessionUser {
+  email: string;
+  name: string;
+}
+
 const navLinks = [
   { href: '/', label: 'Ana Sayfa' },
-  { href: '/hakkimizda', label: 'Hakkımızda' },
-  { href: '/ilkelerimiz', label: 'İlkelerimiz' },
-  { href: '/ogreti', label: 'Öğreti' },
-  { href: '/semboller', label: 'Semboller' },
-  { href: '/manifesto', label: 'Manifesto' },
-  { href: '/uyelik', label: 'Üyelik' },
-  { href: '/tuzuk', label: 'Tüzük' },
+  { href: '/meclis-hakkinda', label: 'Meclis Hakkında' },
+  { href: '/mizan-ilkeleri', label: 'Mizan İlkeleri' },
+  { href: '/tedris-defterleri', label: 'Tedris Defterleri' },
+  { href: '/kutuphane', label: 'Kütüphane' },
+  { href: '/etkinlikler', label: 'Etkinlikler' },
+  { href: '/davet-usulu', label: 'Davet Usulü' },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<SessionUser | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    fetch('/api/auth/session', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.isLoggedIn && data.user) {
+          setUser(data.user);
+        }
+      })
+      .catch(() => setUser(null));
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    setUser(null);
+    router.replace('/uye-girisi');
+    router.refresh();
+  };
+
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -88,18 +113,23 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right — Üye Girişi + Mobile toggle */}
+        {/* Right — Auth + Mobile toggle */}
         <div className="flex items-center gap-4">
-          <Link
-            href="/iletisim"
-            className="hidden md:inline-flex items-center gap-2 font-sans text-[10px] tracking-[0.18em] uppercase font-medium text-charcoal bg-gold px-5 py-2.5 shrink-0 relative overflow-hidden group hover:bg-gold-light"
-            style={{ transition: 'background-color 350ms cubic-bezier(0.4,0,0.2,1)' }}
-          >
-            Davet
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-              <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="hidden md:inline-flex items-center gap-2 font-sans text-[10px] tracking-[0.18em] uppercase font-medium text-charcoal bg-gold px-5 py-2.5 shrink-0 hover:bg-gold-light transition-colors duration-300"
+            >
+              Çıkış Yap
+            </button>
+          ) : (
+            <Link
+              href="/uye-girisi"
+              className="hidden md:inline-flex items-center gap-2 font-sans text-[10px] tracking-[0.18em] uppercase font-medium text-charcoal bg-gold px-5 py-2.5 shrink-0 hover:bg-gold-light transition-colors duration-300"
+            >
+              Üye Girişi
+            </Link>
+          )}
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -152,13 +182,25 @@ export default function Navbar() {
                 </motion.div>
               ))}
               <div className="pt-3 border-t border-gold/10">
-                <Link
-                  href="/iletisim"
-                  onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center gap-2 text-[10px] tracking-wider uppercase font-medium text-charcoal bg-gold px-4 py-2.5 hover:bg-gold-light transition-colors"
-                >
-                  Davet
-                </Link>
+                {user ? (
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false);
+                      handleLogout();
+                    }}
+                    className="inline-flex items-center gap-2 text-[10px] tracking-wider uppercase font-medium text-charcoal bg-gold px-4 py-2.5 hover:bg-gold-light transition-colors"
+                  >
+                    Çıkış Yap
+                  </button>
+                ) : (
+                  <Link
+                    href="/uye-girisi"
+                    onClick={() => setMobileOpen(false)}
+                    className="inline-flex items-center gap-2 text-[10px] tracking-wider uppercase font-medium text-charcoal bg-gold px-4 py-2.5 hover:bg-gold-light transition-colors"
+                  >
+                    Üye Girişi
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>

@@ -4,6 +4,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageTransition from '@/components/PageTransition';
 import ScrollProgress from '@/components/ScrollProgress';
+import SmoothScroll from '@/components/SmoothScroll';
+import CursorGlow from '@/components/CursorGlow';
 
 export const metadata: Metadata = {
   title: {
@@ -30,14 +32,17 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className="min-h-screen flex flex-col bg-bg">
-        <ScrollProgress />
-        <BackgroundAudio />
-        <div className="paper-texture" aria-hidden="true" />
-        <Navbar />
-        <main className="flex-1 pt-16">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
+        <SmoothScroll>
+          <CursorGlow />
+          <ScrollProgress />
+          <BackgroundAudio />
+          <div className="paper-texture" aria-hidden="true" />
+          <Navbar />
+          <main className="flex-1 pt-16">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );

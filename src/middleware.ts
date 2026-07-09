@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getIronSession } from 'iron-session';
+import { sessionOptions, SessionData } from '@/lib/session';
 
 /**
- * Protects the admin panel and the article write/delete API behind
- * HTTP Basic Auth. Credentials are read from environment variables and
- * never shipped to the client. Same-origin fetches from /admin will
- * automatically reuse the cached Basic credentials the browser stores.
+ * Two-tier protection:
+ * 1. Admin routes (/admin/*, /api/articles/*, /api/users) use HTTP Basic Auth.
+ * 2. The rest of the site requires a valid member session cookie.
+ * Public exceptions: login page, auth API, and static assets.
  */
 
-// Timing-safe-ish string comparison for the Edge runtime (no Node crypto).
+const PUBLIC_PATHS = [
+  '/uye-girisi',
+  '/api/auth/login',
+  '/api/auth/logout',
+  '/api/auth/session',
+];
+
 function safeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let result = 0;
@@ -17,7 +25,7 @@ function safeEqual(a: string, b: string): boolean {
   return result === 0;
 }
 
-function unauthorized(): NextResponse {
+function basicUnauthorized(): NextResponse {
   return new NextResponse('Kimlik doğrulaması gerekli.', {
     status: 401,
     headers: {
@@ -26,37 +34,67 @@ function unauthorized(): NextResponse {
   });
 }
 
-export function middleware(req: NextRequest) {
+function checkBasicAuth(req: NextRequest): boolean {
   const expectedUser = process.env.ADMIN_USER;
   const expectedPass = process.env.ADMIN_PASSWORD;
 
-  // If credentials are not configured, deny access to protected areas
-  // rather than leaving them wide open.
-  if (!expectedUser || !expectedPass) {
-    return new NextResponse('Yönetim erişimi yapılandırılmamış.', { status: 503 });
-  }
+  if (!expectedUser || !expectedPass) return false;
 
   const header = req.headers.get('authorization') || '';
-  if (header.startsWith('Basic ')) {
-    try {
-      const decoded = atob(header.slice(6));
-      const sepIndex = decoded.indexOf(':');
-      const user = decoded.slice(0, sepIndex);
-      const pass = decoded.slice(sepIndex + 1);
+  if (!header.startsWith('Basic ')) return false;
 
-      const userOk = safeEqual(user, expectedUser);
-      const passOk = safeEqual(pass, expectedPass);
-      if (userOk && passOk) {
-        return NextResponse.next();
-      }
-    } catch {
-      // fall through to unauthorized
+  try {
+    const decoded = atob(header.slice(6));
+    const sepIndex = decoded.indexOf(':');
+    const user = decoded.slice(0, sepIndex);
+    const pass = decoded.slice(sepIndex + 1);
+    return safeEqual(user, expectedUser) && safeEqual(pass, expectedPass);
+  } catch {
+    return false;
+  }
+}
+
+function isStaticPath(pathname: string): boolean {
+  return (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname.match(/\.(?:webp|webm|mp4|mp3|jpg|jpeg|png|gif|svg|ico|css|js|json)$/) !== null
+  );
+}
+
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Admin routes: HTTP Basic Auth
+  const isAdminRoute =
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/api/articles') ||
+    pathname === '/api/users';
+
+  if (isAdminRoute) {
+    if (checkBasicAuth(req)) {
+      return NextResponse.next();
     }
+    return basicUnauthorized();
   }
 
-  return unauthorized();
+  // Public paths and static assets are allowed without a session
+  if (PUBLIC_PATHS.includes(pathname) || isStaticPath(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Everything else requires a member session
+  const res = NextResponse.next();
+  const session = await getIronSession<SessionData>(req, res, sessionOptions);
+
+  if (!session.isLoggedIn || !session.user) {
+    const loginUrl = new URL('/uye-girisi', req.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return res;
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/articles/:path*'],
+  matcher: ['/((?!robots\\.txt|sitemap\\.xml).*)'],
 };

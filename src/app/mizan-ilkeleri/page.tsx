@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import AnimatedSection from '@/components/AnimatedSection';
+import AnimatedPageHeader from '@/components/AnimatedPageHeader';
+import StaggerContainer from '@/components/StaggerContainer';
 
 export const metadata: Metadata = {
   title: 'Mîzân İlkeleri',
@@ -102,21 +105,16 @@ export default function MizanIlkeleriPage() {
       {/* Page Header */}
       <section className="bg-emerald-dark py-20 md:py-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-geo-dark opacity-30" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-10 text-center">
-          <p className="text-[10px] tracking-widest uppercase text-gold/70 mb-4">Temel Değerler</p>
-          <h1 className="font-display text-[32px] md:text-[46px] font-bold text-chalk leading-tight mb-5">
-            Mîzân İlkeleri
-          </h1>
-          <p className="text-chalk/50 text-[14px] md:text-[15px] leading-relaxed max-w-lg mx-auto">
-            Bu meclisin varlık sebebini ve eylem ölçüsünü belirleyen sekiz temel ilke.
-          </p>
-          <div className="w-16 h-px mx-auto mt-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(180,148,72,0.7), transparent)' }} />
-        </div>
+        <AnimatedPageHeader
+          label="Temel Değerler"
+          title="Mîzân İlkeleri"
+          description="Bu meclisin varlık sebebini ve eylem ölçüsünü belirleyen sekiz temel ilke."
+        />
       </section>
 
       {/* Principles Grid */}
       <section className="max-w-7xl mx-auto px-6 md:px-10 py-20">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" stagger={0.08}>
           {principles.map((p, i) => (
             <div
               key={p.key}
@@ -132,17 +130,19 @@ export default function MizanIlkeleriPage() {
               <p className="text-text-muted text-[13.5px] leading-[1.85]">{p.text}</p>
             </div>
           ))}
-        </div>
+        </StaggerContainer>
       </section>
 
       {/* Closing Quote */}
       <section className="bg-surface py-20">
         <div className="max-w-3xl mx-auto px-6 md:px-10 text-center">
-          <div className="gold-line mx-auto mb-10" />
-          <blockquote className="font-display italic text-[22px] md:text-[28px] text-emerald-dark leading-relaxed">
-            &ldquo;Zulme karşı dururken, zulmün yöntemlerini kullanma.&rdquo;
-          </blockquote>
-          <div className="gold-line mx-auto mt-10" />
+          <AnimatedSection blur scale>
+            <div className="gold-line mx-auto mb-10" />
+            <blockquote className="font-display italic text-[22px] md:text-[28px] text-emerald-dark leading-relaxed">
+              &ldquo;Zulme karşı dururken, zulmün yöntemlerini kullanma.&rdquo;
+            </blockquote>
+            <div className="gold-line mx-auto mt-10" />
+          </AnimatedSection>
         </div>
       </section>
     </>

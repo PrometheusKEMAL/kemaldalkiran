@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function AdminPage() {
   const [form, setForm] = useState({
@@ -63,6 +64,17 @@ export default function AdminPage() {
         <h1 className="font-display text-[32px] md:text-[48px] leading-[0.9] text-white font-bold tracking-tight">
           Yeni Yazı Ekle
         </h1>
+        <div className="flex gap-4 mt-6">
+          <span className="text-[10px] tracking-wider uppercase text-white border border-white/20 px-4 py-2">
+            Yazılar
+          </span>
+          <Link
+            href="/admin/kullanicilar"
+            className="text-[10px] tracking-wider uppercase text-white/40 border border-white/[0.06] px-4 py-2 hover:text-white/60 hover:border-white/20 transition-colors"
+          >
+            Üyeler
+          </Link>
+        </div>
       </div>
 
       {/* Status Message */}

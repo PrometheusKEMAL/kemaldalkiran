@@ -6,9 +6,7 @@ import { Volume2, VolumeX, Play, Pause, Music, SkipForward, SkipBack } from 'luc
 // Dilediğiniz zaman buraya yeni müzik dosyalarının isimlerini ekleyebilirsiniz.
 // (Şarkıları projedeki 'public' klasörüne atmanız yeterlidir.)
 const PLAYLIST = [
-  "/bg-music.mp4",
-  // "/yeni-sarki.mp3",
-  // "/baska-bir-sarki.mp4"
+  "/edip.mp4",
 ];
 
 export default function BackgroundAudio() {

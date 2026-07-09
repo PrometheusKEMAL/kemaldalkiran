@@ -2,14 +2,14 @@ import Link from 'next/link';
 import Logo from './Logo';
 
 const footerLinks = [
-  { href: '/hakkimizda', label: 'Hakkımızda' },
-  { href: '/ilkelerimiz', label: 'İlkelerimiz' },
-  { href: '/ogreti', label: 'Öğreti' },
-  { href: '/semboller', label: 'Semboller' },
-  { href: '/manifesto', label: 'Manifesto' },
-  { href: '/uyelik', label: 'Üyelik' },
-  { href: '/tuzuk', label: 'Tüzük' },
-  { href: '/iletisim', label: 'Davet' },
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/meclis-hakkinda', label: 'Meclis Hakkında' },
+  { href: '/mizan-ilkeleri', label: 'Mizan İlkeleri' },
+  { href: '/tedris-defterleri', label: 'Tedris Defterleri' },
+  { href: '/kutuphane', label: 'Kütüphane' },
+  { href: '/etkinlikler', label: 'Etkinlikler' },
+  { href: '/davet-usulu', label: 'Davet Usulü' },
+  { href: '/iletisim', label: 'İletişim' },
 ];
 
 export default function Footer() {
