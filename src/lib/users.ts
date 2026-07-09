@@ -60,8 +60,10 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 
 export async function verifyPassword(email: string, password: string): Promise<User | null> {
   const user = await getUserByEmail(email);
+  console.log('[verifyPassword] storage:', hasKv() ? 'kv' : 'file', 'email:', email, 'found:', !!user);
   if (!user) return null;
   const isValid = await compare(password, user.passwordHash);
+  console.log('[verifyPassword] password valid:', isValid);
   if (!isValid) return null;
   return user;
 }
@@ -83,6 +85,7 @@ export async function createUser(email: string, name: string, password: string):
   const users = await readUsers();
   users.push(newUser);
   await writeUsers(users);
+  console.log('[createUser] saved to', hasKv() ? 'kv' : 'file', 'total:', users.length, 'email:', newUser.email);
 
   return newUser;
 }

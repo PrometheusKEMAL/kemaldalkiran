@@ -96,5 +96,10 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!robots\\.txt|sitemap\\.xml).*)'],
+  matcher: [
+    '/admin/:path*',
+    '/api/articles/:path*',
+    '/api/users/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|api/auth|uye-girisi).*)',
+  ],
 };
